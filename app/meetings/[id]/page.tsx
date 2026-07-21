@@ -2,12 +2,6 @@ import MeetingDetail from "@/components/MeetingDetail";
 import { SacramentMeeting } from "@/lib/types";
 import { notFound } from "next/navigation";
 
-interface Props {
-  params: {
-    id: string;
-  };
-}
-
 async function getMeeting(id: string): Promise<SacramentMeeting | null> {
   const res = await fetch(`http://localhost:3000/api/meetings/${id}`, {
     cache: "no-store",
@@ -17,11 +11,21 @@ async function getMeeting(id: string): Promise<SacramentMeeting | null> {
     return null;
   }
 
+  if (!res.ok) {
+    throw new Error("Failed to fetch meeting");
+  }
+
   return res.json();
 }
 
-export default async function MeetingPage({ params }: Props) {
-  const meeting = await getMeeting(params.id);
+export default async function MeetingPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  const meeting = await getMeeting(id);
 
   if (!meeting) {
     notFound();
