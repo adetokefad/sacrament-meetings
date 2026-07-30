@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Header() {
   const today = new Date().toLocaleDateString("en-US", {
     weekday: "long",
@@ -14,7 +16,17 @@ export default function Header() {
           <p className="text-blue-200">Springfield Ward</p>
         </div>
 
-        <p className="text-sm md:text-base">{today}</p>
+        <nav className="flex items-center gap-6">
+          <Link href="/" className="hover:underline">
+            Home
+          </Link>
+
+          <Link href="/meetings" className="hover:underline">
+            View Meetings
+          </Link>
+
+          <p className="text-sm md:text-base">{today}</p>
+        </nav>
       </div>
     </header>
   );

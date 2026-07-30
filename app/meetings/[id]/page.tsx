@@ -1,9 +1,10 @@
 import MeetingDetail from "@/components/MeetingDetail";
 import { SacramentMeeting } from "@/lib/types";
 import { notFound } from "next/navigation";
+import { getBaseUrl } from "@/lib/api";
 
 async function getMeeting(id: string): Promise<SacramentMeeting | null> {
-  const res = await fetch(`http://localhost:3000/api/meetings/${id}`, {
+  const res = await fetch(`${getBaseUrl()}/api/meetings/${id}`, {
     cache: "no-store",
   });
 
