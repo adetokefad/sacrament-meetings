@@ -1,7 +1,13 @@
 import MeetingDetail from "@/components/MeetingDetail";
 import { SacramentMeeting } from "@/lib/types";
-import { notFound } from "next/navigation";
 import { getBaseUrl } from "@/lib/api";
+import { notFound } from "next/navigation";
+
+interface Props {
+  params: Promise<{
+    id: string;
+  }>;
+}
 
 async function getMeeting(id: string): Promise<SacramentMeeting | null> {
   const res = await fetch(`${getBaseUrl()}/api/meetings/${id}`, {
@@ -19,13 +25,8 @@ async function getMeeting(id: string): Promise<SacramentMeeting | null> {
   return res.json();
 }
 
-export default async function MeetingPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function MeetingPage({ params }: Props) {
   const { id } = await params;
-
   const meeting = await getMeeting(id);
 
   if (!meeting) {
