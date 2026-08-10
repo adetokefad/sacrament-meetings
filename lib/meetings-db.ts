@@ -1,8 +1,6 @@
 import { neon } from "@neondatabase/serverless";
 import type { SacramentMeeting } from "./types";
 
-console.log("DATABASE_URL =", process.env.DATABASE_URL);
-
 const sql = neon(process.env.DATABASE_URL!);
 
 export async function getMeetings(
@@ -21,7 +19,7 @@ export async function getMeetings(
       ORDER BY date
     `;
 
-    return rows as SacramentMeeting[];
+    return (rows as MeetingRow[]).map(mapMeeting);
   }
 
   if (query) {
@@ -38,7 +36,7 @@ export async function getMeetings(
       OFFSET ${offset}
     `;
 
-    return rows as SacramentMeeting[];
+    return (rows as MeetingRow[]).map(mapMeeting);
   }
 
   const rows = await sql`
@@ -49,7 +47,7 @@ export async function getMeetings(
     OFFSET ${offset}
   `;
 
-  return rows as SacramentMeeting[];
+  return (rows as MeetingRow[]).map(mapMeeting);
 }
 
 export async function getMeetingById(
@@ -65,7 +63,7 @@ export async function getMeetingById(
     return null;
   }
 
-  return mapMeeting(rows[0]);
+  return mapMeeting(rows[0] as MeetingRow);
 }
 
 // Week 04
@@ -81,7 +79,28 @@ export async function deleteMeeting() {
   throw new Error("Not implemented yet.");
 }
 
-function mapMeeting(row: any): SacramentMeeting {
+type MeetingRow = {
+  id: number;
+  date: Date;
+  meeting_type: SacramentMeeting["meetingType"];
+  presiding: string;
+  conducting: string;
+  announcements: string[] | null;
+  opening_hymn: { number: number; title: string };
+  opening_prayer: string;
+  ward_business: { description: string }[];
+  stake_business: boolean;
+  sacrament_hymn: { number: number; title: string };
+  speakers: {
+    name: string;
+    topic: string;
+    type: "speaker" | "musical-number";
+  }[];
+  closing_hymn: { number: number; title: string };
+  closing_prayer: string;
+};
+
+function mapMeeting(row: MeetingRow): SacramentMeeting {
   return {
     id: row.id,
     date: row.date.toISOString().split("T")[0],
