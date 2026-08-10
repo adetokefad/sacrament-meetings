@@ -8,20 +8,29 @@ const initialState: State = {
   errors: {},
 };
 
-export default function NewMeetingPage() {
+export default function NewMeetingForm() {
   const [state, formAction, isPending] = useActionState(
     createMeeting,
     initialState,
   );
 
   return (
-    <div className="mx-auto max-w-4xl p-8">
-      <h1 className="mb-8 text-3xl font-bold">Create New Meeting</h1>
+    <div className="mx-auto max-w-3xl p-8">
+      <h1 className="mb-6 text-3xl font-bold">Create New Meeting</h1>
+
+      {state.message && (
+        <p
+          className="mb-4 rounded bg-red-100 p-3 text-red-700"
+          aria-live="polite"
+        >
+          {state.message}
+        </p>
+      )}
 
       <form action={formAction} className="space-y-6">
         {/* Date */}
         <div>
-          <label htmlFor="date" className="block font-medium">
+          <label htmlFor="date" className="mb-1 block font-medium">
             Date
           </label>
 
@@ -29,35 +38,31 @@ export default function NewMeetingPage() {
             id="date"
             name="date"
             type="date"
+            className="w-full rounded border p-2"
             aria-describedby="date-error"
-            className="mt-2 w-full rounded border border-gray-300 p-2"
           />
 
           <p
             id="date-error"
-            aria-live="polite"
             className="mt-1 text-sm text-red-600"
+            aria-live="polite"
           >
-            {state.errors?.date?.map((error) => (
-              <span key={error} className="block">
-                {error}
-              </span>
-            ))}
+            {state.errors?.date?.[0]}
           </p>
         </div>
 
         {/* Meeting Type */}
         <div>
-          <label htmlFor="meetingType" className="block font-medium">
+          <label htmlFor="meetingType" className="mb-1 block font-medium">
             Meeting Type
           </label>
 
           <select
             id="meetingType"
             name="meetingType"
-            defaultValue=""
+            className="w-full rounded border p-2"
             aria-describedby="meetingType-error"
-            className="mt-2 w-full rounded border border-gray-300 p-2"
+            defaultValue=""
           >
             <option value="" disabled>
               Select meeting type
@@ -70,20 +75,16 @@ export default function NewMeetingPage() {
 
           <p
             id="meetingType-error"
-            aria-live="polite"
             className="mt-1 text-sm text-red-600"
+            aria-live="polite"
           >
-            {state.errors?.meetingType?.map((error) => (
-              <span key={error} className="block">
-                {error}
-              </span>
-            ))}
+            {state.errors?.meetingType?.[0]}
           </p>
         </div>
 
         {/* Presiding */}
         <div>
-          <label htmlFor="presiding" className="block font-medium">
+          <label htmlFor="presiding" className="mb-1 block font-medium">
             Presiding Officer
           </label>
 
@@ -91,26 +92,22 @@ export default function NewMeetingPage() {
             id="presiding"
             name="presiding"
             type="text"
+            className="w-full rounded border p-2"
             aria-describedby="presiding-error"
-            className="mt-2 w-full rounded border border-gray-300 p-2"
           />
 
           <p
             id="presiding-error"
-            aria-live="polite"
             className="mt-1 text-sm text-red-600"
+            aria-live="polite"
           >
-            {state.errors?.presiding?.map((error) => (
-              <span key={error} className="block">
-                {error}
-              </span>
-            ))}
+            {state.errors?.presiding?.[0]}
           </p>
         </div>
 
         {/* Conducting */}
         <div>
-          <label htmlFor="conducting" className="block font-medium">
+          <label htmlFor="conducting" className="mb-1 block font-medium">
             Conducting Officer
           </label>
 
@@ -118,30 +115,29 @@ export default function NewMeetingPage() {
             id="conducting"
             name="conducting"
             type="text"
+            className="w-full rounded border p-2"
             aria-describedby="conducting-error"
-            className="mt-2 w-full rounded border border-gray-300 p-2"
           />
 
           <p
             id="conducting-error"
-            aria-live="polite"
             className="mt-1 text-sm text-red-600"
+            aria-live="polite"
           >
-            {state.errors?.conducting?.map((error) => (
-              <span key={error} className="block">
-                {error}
-              </span>
-            ))}
+            {state.errors?.conducting?.[0]}
           </p>
         </div>
 
         {/* Opening Hymn */}
-        <div className="rounded-lg border p-5">
-          <h2 className="mb-4 text-xl font-semibold">Opening Hymn</h2>
+        <div>
+          <h2 className="mb-3 text-xl font-semibold">Opening Hymn</h2>
 
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <label htmlFor="openingHymnNumber" className="block font-medium">
+              <label
+                htmlFor="openingHymnNumber"
+                className="mb-1 block font-medium"
+              >
                 Hymn Number
               </label>
 
@@ -149,25 +145,24 @@ export default function NewMeetingPage() {
                 id="openingHymnNumber"
                 name="openingHymnNumber"
                 type="number"
+                className="w-full rounded border p-2"
                 aria-describedby="openingHymnNumber-error"
-                className="mt-2 w-full rounded border border-gray-300 p-2"
               />
 
               <p
                 id="openingHymnNumber-error"
-                aria-live="polite"
                 className="mt-1 text-sm text-red-600"
+                aria-live="polite"
               >
-                {state.errors?.openingHymnNumber?.map((error) => (
-                  <span key={error} className="block">
-                    {error}
-                  </span>
-                ))}
+                {state.errors?.openingHymnNumber?.[0]}
               </p>
             </div>
 
             <div>
-              <label htmlFor="openingHymnTitle" className="block font-medium">
+              <label
+                htmlFor="openingHymnTitle"
+                className="mb-1 block font-medium"
+              >
                 Hymn Title
               </label>
 
@@ -175,20 +170,16 @@ export default function NewMeetingPage() {
                 id="openingHymnTitle"
                 name="openingHymnTitle"
                 type="text"
+                className="w-full rounded border p-2"
                 aria-describedby="openingHymnTitle-error"
-                className="mt-2 w-full rounded border border-gray-300 p-2"
               />
 
               <p
                 id="openingHymnTitle-error"
-                aria-live="polite"
                 className="mt-1 text-sm text-red-600"
+                aria-live="polite"
               >
-                {state.errors?.openingHymnTitle?.map((error) => (
-                  <span key={error} className="block">
-                    {error}
-                  </span>
-                ))}
+                {state.errors?.openingHymnTitle?.[0]}
               </p>
             </div>
           </div>
@@ -196,7 +187,7 @@ export default function NewMeetingPage() {
 
         {/* Opening Prayer */}
         <div>
-          <label htmlFor="openingPrayer" className="block font-medium">
+          <label htmlFor="openingPrayer" className="mb-1 block font-medium">
             Opening Prayer
           </label>
 
@@ -204,32 +195,28 @@ export default function NewMeetingPage() {
             id="openingPrayer"
             name="openingPrayer"
             type="text"
+            className="w-full rounded border p-2"
             aria-describedby="openingPrayer-error"
-            className="mt-2 w-full rounded border border-gray-300 p-2"
           />
 
           <p
             id="openingPrayer-error"
-            aria-live="polite"
             className="mt-1 text-sm text-red-600"
+            aria-live="polite"
           >
-            {state.errors?.openingPrayer?.map((error) => (
-              <span key={error} className="block">
-                {error}
-              </span>
-            ))}
+            {state.errors?.openingPrayer?.[0]}
           </p>
         </div>
 
         {/* Sacrament Hymn */}
-        <div className="rounded-lg border p-5">
-          <h2 className="mb-4 text-xl font-semibold">Sacrament Hymn</h2>
+        <div>
+          <h2 className="mb-3 text-xl font-semibold">Sacrament Hymn</h2>
 
           <div className="grid gap-4 md:grid-cols-2">
             <div>
               <label
                 htmlFor="sacramentHymnNumber"
-                className="block font-medium"
+                className="mb-1 block font-medium"
               >
                 Hymn Number
               </label>
@@ -238,25 +225,24 @@ export default function NewMeetingPage() {
                 id="sacramentHymnNumber"
                 name="sacramentHymnNumber"
                 type="number"
+                className="w-full rounded border p-2"
                 aria-describedby="sacramentHymnNumber-error"
-                className="mt-2 w-full rounded border border-gray-300 p-2"
               />
 
               <p
                 id="sacramentHymnNumber-error"
-                aria-live="polite"
                 className="mt-1 text-sm text-red-600"
+                aria-live="polite"
               >
-                {state.errors?.sacramentHymnNumber?.map((error) => (
-                  <span key={error} className="block">
-                    {error}
-                  </span>
-                ))}
+                {state.errors?.sacramentHymnNumber?.[0]}
               </p>
             </div>
 
             <div>
-              <label htmlFor="sacramentHymnTitle" className="block font-medium">
+              <label
+                htmlFor="sacramentHymnTitle"
+                className="mb-1 block font-medium"
+              >
                 Hymn Title
               </label>
 
@@ -264,32 +250,32 @@ export default function NewMeetingPage() {
                 id="sacramentHymnTitle"
                 name="sacramentHymnTitle"
                 type="text"
+                className="w-full rounded border p-2"
                 aria-describedby="sacramentHymnTitle-error"
-                className="mt-2 w-full rounded border border-gray-300 p-2"
               />
 
               <p
                 id="sacramentHymnTitle-error"
-                aria-live="polite"
                 className="mt-1 text-sm text-red-600"
+                aria-live="polite"
               >
-                {state.errors?.sacramentHymnTitle?.map((error) => (
-                  <span key={error} className="block">
-                    {error}
-                  </span>
-                ))}
+                {state.errors?.sacramentHymnTitle?.[0]}
               </p>
             </div>
           </div>
         </div>
 
+        {/* Opening Prayer */}
         {/* Closing Hymn */}
-        <div className="rounded-lg border p-5">
-          <h2 className="mb-4 text-xl font-semibold">Closing Hymn</h2>
+        <div>
+          <h2 className="mb-3 text-xl font-semibold">Closing Hymn</h2>
 
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <label htmlFor="closingHymnNumber" className="block font-medium">
+              <label
+                htmlFor="closingHymnNumber"
+                className="mb-1 block font-medium"
+              >
                 Hymn Number
               </label>
 
@@ -297,25 +283,24 @@ export default function NewMeetingPage() {
                 id="closingHymnNumber"
                 name="closingHymnNumber"
                 type="number"
+                className="w-full rounded border p-2"
                 aria-describedby="closingHymnNumber-error"
-                className="mt-2 w-full rounded border border-gray-300 p-2"
               />
 
               <p
                 id="closingHymnNumber-error"
-                aria-live="polite"
                 className="mt-1 text-sm text-red-600"
+                aria-live="polite"
               >
-                {state.errors?.closingHymnNumber?.map((error) => (
-                  <span key={error} className="block">
-                    {error}
-                  </span>
-                ))}
+                {state.errors?.closingHymnNumber?.[0]}
               </p>
             </div>
 
             <div>
-              <label htmlFor="closingHymnTitle" className="block font-medium">
+              <label
+                htmlFor="closingHymnTitle"
+                className="mb-1 block font-medium"
+              >
                 Hymn Title
               </label>
 
@@ -323,20 +308,16 @@ export default function NewMeetingPage() {
                 id="closingHymnTitle"
                 name="closingHymnTitle"
                 type="text"
+                className="w-full rounded border p-2"
                 aria-describedby="closingHymnTitle-error"
-                className="mt-2 w-full rounded border border-gray-300 p-2"
               />
 
               <p
                 id="closingHymnTitle-error"
-                aria-live="polite"
                 className="mt-1 text-sm text-red-600"
+                aria-live="polite"
               >
-                {state.errors?.closingHymnTitle?.map((error) => (
-                  <span key={error} className="block">
-                    {error}
-                  </span>
-                ))}
+                {state.errors?.closingHymnTitle?.[0]}
               </p>
             </div>
           </div>
@@ -344,7 +325,7 @@ export default function NewMeetingPage() {
 
         {/* Closing Prayer */}
         <div>
-          <label htmlFor="closingPrayer" className="block font-medium">
+          <label htmlFor="closingPrayer" className="mb-1 block font-medium">
             Closing Prayer
           </label>
 
@@ -352,35 +333,23 @@ export default function NewMeetingPage() {
             id="closingPrayer"
             name="closingPrayer"
             type="text"
+            className="w-full rounded border p-2"
             aria-describedby="closingPrayer-error"
-            className="mt-2 w-full rounded border border-gray-300 p-2"
           />
 
           <p
             id="closingPrayer-error"
-            aria-live="polite"
             className="mt-1 text-sm text-red-600"
+            aria-live="polite"
           >
-            {state.errors?.closingPrayer?.map((error) => (
-              <span key={error} className="block">
-                {error}
-              </span>
-            ))}
+            {state.errors?.closingPrayer?.[0]}
           </p>
         </div>
 
-        {/* General form message */}
-        {state.message && (
-          <p aria-live="polite" className="rounded bg-red-50 p-3 text-red-700">
-            {state.message}
-          </p>
-        )}
-
-        {/* Submit */}
         <button
           type="submit"
           disabled={isPending}
-          className="rounded bg-blue-700 px-6 py-3 font-medium text-white hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
         >
           {isPending ? "Creating..." : "Create Meeting"}
         </button>

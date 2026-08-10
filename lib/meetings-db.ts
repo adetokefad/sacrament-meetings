@@ -66,17 +66,85 @@ export async function getMeetingById(
   return mapMeeting(rows[0] as MeetingRow);
 }
 
-// Week 04
-export async function addMeeting() {
-  throw new Error("Not implemented yet.");
+export async function addMeeting(
+  meeting: Omit<SacramentMeeting, "id">,
+): Promise<SacramentMeeting> {
+  const rows = await sql`
+    INSERT INTO meetings (
+      date,
+      meeting_type,
+      presiding,
+      conducting,
+      announcements,
+      opening_hymn,
+      opening_prayer,
+      ward_business,
+      stake_business,
+      sacrament_hymn,
+      speakers,
+      closing_hymn,
+      closing_prayer
+    )
+    VALUES (
+      ${meeting.date},
+      ${meeting.meetingType},
+      ${meeting.presiding},
+      ${meeting.conducting},
+      ARRAY[${(meeting.announcements ?? []).map((announcement) => sql`${announcement}`)}],
+      ${JSON.stringify(meeting.openingHymn)},
+      ${meeting.openingPrayer},
+      ${JSON.stringify(meeting.wardBusiness)},
+      ${meeting.stakeBusiness},
+      ${JSON.stringify(meeting.sacramentHymn)},
+      ${JSON.stringify(meeting.speakers)},
+      ${JSON.stringify(meeting.closingHymn)},
+      ${meeting.closingPrayer}
+    )
+    RETURNING *
+  `;
+
+  return mapMeeting(rows[0] as MeetingRow);
 }
 
-export async function updateMeeting() {
-  throw new Error("Not implemented yet.");
+export async function updateMeeting(
+  id: number,
+  meeting: Omit<SacramentMeeting, "id">,
+): Promise<SacramentMeeting | null> {
+  const rows = await sql`
+    UPDATE meetings
+    SET
+      date = ${meeting.date},
+      meeting_type = ${meeting.meetingType},
+      presiding = ${meeting.presiding},
+      conducting = ${meeting.conducting},
+      announcements = ARRAY[${(meeting.announcements ?? []).map((announcement) => sql`${announcement}`)}],
+      opening_hymn = ${JSON.stringify(meeting.openingHymn)},
+      opening_prayer = ${meeting.openingPrayer},
+      ward_business = ${JSON.stringify(meeting.wardBusiness)},
+      stake_business = ${meeting.stakeBusiness},
+      sacrament_hymn = ${JSON.stringify(meeting.sacramentHymn)},
+      speakers = ${JSON.stringify(meeting.speakers)},
+      closing_hymn = ${JSON.stringify(meeting.closingHymn)},
+      closing_prayer = ${meeting.closingPrayer}
+    WHERE id = ${id}
+    RETURNING *
+  `;
+
+  if (rows.length === 0) {
+    return null;
+  }
+
+  return mapMeeting(rows[0] as MeetingRow);
 }
 
-export async function deleteMeeting() {
-  throw new Error("Not implemented yet.");
+export async function deleteMeeting(id: number): Promise<boolean> {
+  const rows = await sql`
+    DELETE FROM meetings
+    WHERE id = ${id}
+    RETURNING id
+  `;
+
+  return rows.length > 0;
 }
 
 type MeetingRow = {
